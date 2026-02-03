@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "my-chart.fullname" . }}
+  labels:
+    app: {{ include "my-chart.name" . }}
+    environment: {{ .Values.environment }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "my-chart.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "my-chart.name" . }}
+        environment: {{ .Values.environment }}
+    spec:
+      containers:
+        - name: nginx
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 80
+          env:
+            - name: ENVIRONMENT
+              value: "{{ .Values.environment }}"
